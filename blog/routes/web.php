@@ -20,5 +20,9 @@ Route::get('/', function () {
 });
 
 
-Route::get('/home', [BlogController::class, 'index']);
-Route::get('/about', [BlogController::class, 'about']);
+Route::get('/home', [BlogController::class, 'index'])->name('home');
+Route::get('/about', [BlogController::class, 'about'])->name('about');
+Route::get('/article', [BlogController::class, 'article'])->name('article');
+Route::get('/contact', [BlogController::class, 'contact'])->name('contact');
+Route::post('/contact', [BlogController::class, 'message'])->name('contact');
+
