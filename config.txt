@@ -1,0 +1,33 @@
+composer dump-autoload -o
+
+php artisan cache:clear
+
+import AbstractView from "./AbstractView.js";
+
+export default class extends AbstractView {
+    constructor(params) {
+        super(params);
+        this.setTitle("Products");
+    }
+
+    async getHtml() {
+
+        async function getData(url) {
+            const response = await fetch(url);
+            return response.json();
+        }
+          
+        const data = await getData('/static/data/products.json');
+
+        let listProducts = "<ul>"
+        for(let i in data) {
+            listProducts +=`<li><a href="/product-view/${data[i]['id']}" data-link>${data[i]['name']}</a></li>`
+        }
+        listProducts +="</ul>"
+            
+        return `
+        <h1>Products</h1>
+        ${listProducts}
+        `
+    }
+}
