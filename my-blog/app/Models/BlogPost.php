@@ -18,4 +18,8 @@ class BlogPost extends Model
     //protected $timestamp = false; 
 
     protected $fillable = ['title', 'body', 'user_id'];
+
+    public function blogHasUser() {
+        return $this->hasOne('App\Models\User', 'id', 'user_id');
+    }
 }

@@ -12,7 +12,7 @@
                 {!! $blogPost->body !!}
             </p>
             <p>
-                <strong>Author:</strong> {{ $blogPost->user_id }}
+                <strong>Author:</strong> {{ $blogPost->blogHasUser->name }}
             </p>
         </div>
     </div>
