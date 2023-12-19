@@ -9,6 +9,15 @@
                             Login
                     </div>
                     <div class="card-body">
+                        @if(!$errors->isEmpty())
+                            <div class="alert alert-danger">
+                                <ul>
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>    
+                                @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="control-group col-12">
                             <label for="username">Username</label>
                             <input type="email" id="username" name="email" class="form-control" value="{{ old('email')}}">

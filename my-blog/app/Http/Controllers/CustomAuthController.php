@@ -37,13 +37,14 @@ class CustomAuthController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'name' => 'min:2 | max:45',
             'email' => 'email|required|unique:users',
             'password' => 'min:6|max:20',
           //  'password' => ['min:6', 'max:20'],
         ]);
-        // redirect()->back()->withErrors()->withInpust()
+        // redirect()->back()->withErrors()->withInput()
         // v 10 publier le dossier lang / php artisan lang:publish
 
         // User::create([
@@ -64,10 +65,36 @@ class CustomAuthController extends Controller
     public function authentication(Request $request){
         
         $request->validate([
-            'email' => 'email|required',
+            'email' => 'email|required|exists:users',
             'password' => 'min:6|max:20',
         ]);
-        return $request;
+        
+        $credentials = $request->only('email', 'password');
+
+        
+        if(!Auth::validate($credentials)):
+            return redirect(route('login'))->withErrors(trans('auth.password'))->withInput();
+        endif;
+
+        $user = Auth::getProvider()->retrieveByCredentials($credentials);
+
+        Auth::login($user);
+
+        return redirect()->intended(route('blog.index'));
+
+    }
+
+    public function logout(){
+        Auth::logout();
+        return redirect(route('login'));
+    }
+
+    public function userList(){
+        $users = User::Select('id','name')
+                ->orderBy('name')
+                ->paginate(5);
+
+        return view('auth.user-list', compact('users'));
     }
 
 }
