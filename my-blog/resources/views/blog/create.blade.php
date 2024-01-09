@@ -17,6 +17,15 @@
                             <label for="body">Article</label>
                             <textarea id="body" name="body" class="form-control"></textarea>
                         </div>
+                        <div class="control-group col-12">
+                            <label for="category">Category</label>
+                           <select id="category" class="form-control" name="category_id">
+                            <option value="">Select the category</option>
+                            @foreach($categories as $category)
+                            <option value="{{$category->id}}">{{$category->category}}</option>
+                            @endforeach
+                           </select>
+                        </div>
                     </div>
                     <div class="card-footer text-center">
                         <input type="submit" value="Sauvegarder" class="btn btn-success">

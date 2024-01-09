@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,9 @@ class BlogPostController extends Controller
      */
     public function create()
     {
-        return view('blog.create');
+        $categories = Category::categorySelect();
+        //return $categories;
+        return view('blog.create', compact('categories'));
     }
 
     /**
@@ -48,8 +51,16 @@ class BlogPostController extends Controller
         $newBlog = BlogPost::create([
             'title' => $request->title,
             'body' => $request->body,
+            'category_id' =>  $request->category_id,
             'user_id' => Auth::user()->id,
         ]);
+
+        // $newBlog = new BlogPost;
+        // $newBlog->fill($request->all()); 
+        // $newBlog->user_id =  Auth::user()->id;
+        // $newBlog->save();
+
+
 
         //return $newBlog;
         return redirect(route('blog.show', $newBlog->id))->withSuccess('Article enregistré!');
@@ -79,7 +90,11 @@ class BlogPostController extends Controller
      */
     public function edit(BlogPost $blogPost)
     {
-        return view('blog.edit', compact('blogPost'));
+       // $categories = Category::select()->orderby('category')->get();
+        
+       $categories = Category::categorySelect();
+
+       return view('blog.edit', compact('blogPost', 'categories'));
     }
 
     /**
@@ -94,7 +109,14 @@ class BlogPostController extends Controller
         $blogPost->update([
             'title' => $request->title,
             'body' => $request->body,
+            'category_id' =>  $request->category_id,
         ]);
+
+
+        // $blogPost->fill($request->all()); 
+        // $blogPost->save();
+
+
 
         return redirect(route('blog.show', $blogPost->id))->withSuccess('Article mis a jour!');;
     }

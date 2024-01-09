@@ -17,9 +17,13 @@ class BlogPost extends Model
     //sans utiliser created_at /updated_at
     //protected $timestamp = false; 
 
-    protected $fillable = ['title', 'body', 'user_id'];
+    protected $fillable = ['title', 'body', 'user_id', 'category_id'];
 
     public function blogHasUser() {
         return $this->hasOne('App\Models\User', 'id', 'user_id');
+    }
+
+    public function blogHasCategory() {
+        return $this->hasOne('App\Models\Category', 'id', 'category_id');
     }
 }
