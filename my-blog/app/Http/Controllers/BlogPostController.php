@@ -63,7 +63,7 @@ class BlogPostController extends Controller
 
 
         //return $newBlog;
-        return redirect(route('blog.show', $newBlog->id))->withSuccess('Article enregistré!');
+        return redirect(route('blog.show', $newBlog->id))->withSuccess(trans('lang.text_success_blog'));
     }
 
     /**
