@@ -3,10 +3,10 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
-                <form action="{{ route('authentication') }}" method="post">
+                <form action="{{ route('temp.password')}}" method="post">
                     @csrf
                     <div class="card-header display-6 text-center">
-                            Login
+                            Forgot Password
                     </div>
                     <div class="card-body">
                         @if(!$errors->isEmpty())
@@ -25,21 +25,10 @@
                                 <span class="text-danger">{{$errors->first('email')}}</span>
                             @endif
                         </div>
-                        <div class="control-group col-12">
-                            <label for="password">Password</label>
-                            <input type="password" id="password" name="password" class="form-control">
-                            @if($errors->has('password'))
-                                <span class="text-danger">{{$errors->first('password')}}</span>
-                            @endif
-                        </div>
                     </div>
                     <div class="card-footer text-center">
-                        <input type="submit" value="Connecter" class="btn btn-success">
-                        <div class="mt-1">
-                            <a href="{{ route('forgot.password')}}">Forgot Password</a>
-                        </div>
+                        <input type="submit" value="Reset" class="btn btn-success">
                     </div>
-                    
                 </form>
             </div>
         </div>

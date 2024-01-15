@@ -36,6 +36,10 @@ Route::get('/login',[CustomAuthController::class, 'index'])->name('login');
 Route::post('/authentication',[CustomAuthController::class, 'authentication'])->name('authentication');
 Route::get('/logout',[CustomAuthController::class, 'logout'])->name('logout');
 Route::get('/user-list',[CustomAuthController::class, 'userList'])->name('user.list')->middleware('auth');
+Route::get('/forgot-password', [CustomAuthController::class, 'forgotPassword'])->name('forgot.password');
+Route::post('/forgot-password', [CustomAuthController::class, 'tempPassword'])->name('temp.password');
+Route::get('/new-password/{user}/{tempPassword}', [CustomAuthController::class, 'newPassword'])->name('new.password');
+Route::post('/new-password/{user}/{tempPassword}', [CustomAuthController::class, 'storeNewPassword']);
 
 
 Route::get('/lang/{locale}', [LocalizationController::class, 'index'])->name('lang');

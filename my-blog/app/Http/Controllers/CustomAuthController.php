@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class CustomAuthController extends Controller
 {
@@ -57,6 +59,17 @@ class CustomAuthController extends Controller
         $user->fill($request->all()); 
         $user->password = Hash::make($request->password);
         $user->save();
+
+        $to_name = $request->name;
+        $to_email = $request->email;
+        $body = "<a href='http://www.localhost:8000'>Cliquez ici pour confirmer votre compte.</a>";
+
+        //return view('email.mail',['name'=> $to_name, 'body'=>$body]);
+
+        Mail::send('email.mail',['name'=> $to_name, 'body'=>$body], 
+            function($message) use ($to_name, $to_email){
+                $message->to($to_email, $to_name)->subject('Test Laravel'); 
+            });
         
         return redirect(route('login'))->withSuccess('Utilisateur enregistré!');
 
@@ -95,6 +108,63 @@ class CustomAuthController extends Controller
                 ->paginate(5);
 
         return view('auth.user-list', compact('users'));
+    }
+
+    public function forgotPassword(){
+        return view('auth.forgot-password');
+    }
+
+    public function tempPassword(Request $request){
+        $request->validate([
+            'email' => 'required|email|exists:users'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        $userId = $user->id;
+        
+        $tempPassword = str::random(45);
+
+        $user->temp_password = $tempPassword;
+        $user->save();
+
+        $to_name = $user->name;
+        $to_email = $user->email;
+        $body = "<a href=".route('new-password', [$userId, $tempPassword]).">Cliquez ici pour réinitializer votre mot de passe.</a>";
+
+       // return $body;
+
+        //return view('email.mail',['name'=> $to_name, 'body'=>$body]);
+
+        Mail::send('email.mail',['name'=> $to_name, 'body'=>$body], 
+            function($message) use ($to_name, $to_email){
+                $message->to($to_email, $to_name)->subject('Reset Password'); 
+            });
+
+        return redirect(route('login'))->withSuccess('Verifier votre courriel');
+    }
+
+    public function newPassword(User $user, $tempPassword){
+
+       // return  $user->temp_password." ".$tempPassword;
+
+        if($user->temp_password === $tempPassword){
+            return view('auth.new-password');
+        }
+        return redirect('forgot-password')->withErrors(trans('auth.failed'));
+    }
+
+    public function storeNewPassword(User $user, $tempPassword, Request $request){
+        
+        if($user->temp_password === $tempPassword){
+            $request->validate([
+                'password' => 'required|min:6|max:20|confirmed'
+            ]);
+            $user->password = Hash::make($request->password);
+            $user->temp_password = null;
+            $user->save();
+            return redirect(route('login'))->withSuccess('Mot de passe modifié');
+        }
+        return redirect('forgot-password')->withErrors(trans('auth.failed'));
     }
 
 }
