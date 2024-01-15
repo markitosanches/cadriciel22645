@@ -129,7 +129,7 @@ class CustomAuthController extends Controller
 
         $to_name = $user->name;
         $to_email = $user->email;
-        $body = "<a href=".route('new-password', [$userId, $tempPassword]).">Cliquez ici pour réinitializer votre mot de passe.</a>";
+        $body = "<a href='".route('new.password', [$userId, $tempPassword])."'>Cliquez ici pour réinitializer votre mot de passe.</a>";
 
        // return $body;
 
