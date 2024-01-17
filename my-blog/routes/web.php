@@ -29,8 +29,9 @@ Route::put('/blog-edit/{blogPost}', [BlogPostController::class, 'update'])->midd
 Route::delete('/blog/{blogPost}', [BlogPostController::class, 'destroy'])->name('blog.delete')->middleware('auth');
 Route::get('/query', [BlogPostController::class, 'query']);
 Route::get('/blog-page', [BlogPostController::class, 'pagination']);
+Route::get('/blog-pdf/{blogPost}', [BlogPostController::class, 'showPdf'])->name('blog.showPdf');
 
-Route::get('/registration',[CustomAuthController::class, 'create'])->name('registration');
+Route::get('/registration',[CustomAuthController::class, 'create'])->name('registration')->middleware('can:create-users');
 Route::post('/registration',[CustomAuthController::class, 'store']);
 Route::get('/login',[CustomAuthController::class, 'index'])->name('login');
 Route::post('/authentication',[CustomAuthController::class, 'authentication'])->name('authentication');

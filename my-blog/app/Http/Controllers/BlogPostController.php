@@ -7,6 +7,8 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use PDF;
+//use Barryvdh\DomPDF\Facade\PDF;
 
 class BlogPostController extends Controller
 {
@@ -196,5 +198,11 @@ class BlogPostController extends Controller
 
     }
 
+    public function showPdf(BlogPost $blogPost)
+    {
 
+        $pdf = PDF::loadView('blog.show-pdf', ['blogPost' => $blogPost]);
+        return $pdf->download('blog_'.$blogPost->id.'.pdf');
+        //return $pdf->stream('blog.pdf');
+    }
 }
