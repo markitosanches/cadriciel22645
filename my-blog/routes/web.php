@@ -41,8 +41,6 @@ Route::get('/forgot-password', [CustomAuthController::class, 'forgotPassword'])-
 Route::post('/forgot-password', [CustomAuthController::class, 'tempPassword'])->name('temp.password');
 Route::get('/new-password/{user}/{tempPassword}', [CustomAuthController::class, 'newPassword'])->name('new.password');
 Route::post('/new-password/{user}/{tempPassword}', [CustomAuthController::class, 'storeNewPassword']);
-
-
 Route::get('/lang/{locale}', [LocalizationController::class, 'index'])->name('lang');
 
 

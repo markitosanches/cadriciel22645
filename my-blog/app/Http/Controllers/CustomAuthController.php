@@ -112,11 +112,18 @@ class CustomAuthController extends Controller
     }
 
     public function userList(){
-        $users = User::Select('id','name')
-                ->orderBy('name')
-                ->paginate(5);
+
+        if(Auth::user()->can('edit-users')){
+
+            $users = User::Select('id','name')
+            ->orderBy('name')
+            ->paginate(5);
 
         return view('auth.user-list', compact('users'));
+        }else{
+            return 'Domage';
+        }
+
     }
 
     public function forgotPassword(){
